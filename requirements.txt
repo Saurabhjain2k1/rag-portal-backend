@@ -1,0 +1,30 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2.0
+psycopg2-binary
+pydantic>=2.0
+pydantic-settings
+python-dotenv
+passlib[bcrypt]
+google-genai
+python-multipart
+python-jose[cryptography]
+pydantic[email]
+pypdf
+# beautifulsoup4
+# trafilatura
+# requests
+# lxml
+# lxml_html_clean
+langchain
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-chroma
+psycopg2
+# langchain-postgres
+# langchain-google-genai
+# chromadb
+sentence-transformers
+unstructured
+beautifulsoup4

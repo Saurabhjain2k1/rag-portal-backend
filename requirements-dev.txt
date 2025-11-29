@@ -1,0 +1,10 @@
+# pypdf
+# beautifulsoup4
+# trafilatura
+# requests
+# lxml
+# lxml_html_clean
+# psycopg2
+# langchain-postgres
+# langchain-google-genai
+# chromadb
