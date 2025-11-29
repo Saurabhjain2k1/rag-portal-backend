@@ -19,7 +19,7 @@ MAX_FILE_SIZE_BYTES = settings.max_file_size_mb * 1024 * 1024
 
 
 @router.post("/upload", response_model=DocumentResponse)
-def upload_document(
+async def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(deps.get_db),
     admin_user: User = Depends(deps.require_admin),  # 👈 admin-only
@@ -28,7 +28,7 @@ def upload_document(
     Upload a document for the current tenant (admin-only).
     """
     # Read file into memory once
-    content = file.read()
+    content = await file.read()
 
     # 🚨 1. Enforce file size limit
     if len(content) > MAX_FILE_SIZE_BYTES:
