@@ -158,6 +158,7 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.db import Base, engine
+from app.api.routes_auth import router as auth_router   # 👈 only this router added
 
 logger = logging.getLogger(__name__)
 
@@ -175,12 +176,9 @@ async def lifespan(app: FastAPI):
         logger.info("Database tables ready.")
     except Exception as e:
         logger.exception("Error during DB initialization on startup: %s", e)
-        # Reraise so we SEE this in logs if it happens on Render
         raise
 
     yield
-
-    logger.info("Application shutdown complete.")
 
 
 app = FastAPI(title="Multi-Tenant RAG Portal", lifespan=lifespan)
@@ -192,6 +190,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Routers (only auth for now)
+app.include_router(auth_router)
 
 
 @app.get("/health")
