@@ -161,6 +161,7 @@ from app.db import Base, engine
 from app.api.routes_auth import router as auth_router   # 👈 only this router added
 from app.api.routes_users import router as users_router
 from app.api.routes_chat import router as chat_router
+from app.api.routes_documents import router as documents_router
 
 logger = logging.getLogger(__name__)
 
@@ -197,6 +198,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(chat_router, prefix="/chat", tags=["chat"])
+app.include_router(documents_router)
 
 @app.get("/health")
 def health_check():
