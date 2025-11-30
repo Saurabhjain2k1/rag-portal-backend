@@ -58,80 +58,80 @@
 
 # app/main.py
 # app/main.py
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-import logging
+# from fastapi import FastAPI, Depends
+# from fastapi.middleware.cors import CORSMiddleware
+# from contextlib import asynccontextmanager
+# import logging
 
-from app.db import Base, engine
-# from app.ai import get_ai_provider
-# from app.ai.base import AIProvider
-from app.api.routes_auth import router as auth_router
-from app.api.routes_documents import router as documents_router
-from app.api.routes_chat import router as chat_router
-from app.api.routes_users import router as users_router
-
-
-logger = logging.getLogger(__name__)
+# from app.db import Base, engine
+# # from app.ai import get_ai_provider
+# # from app.ai.base import AIProvider
+# from app.api.routes_auth import router as auth_router
+# from app.api.routes_documents import router as documents_router
+# from app.api.routes_chat import router as chat_router
+# from app.api.routes_users import router as users_router
 
 
-# -----------------------
-# 🚀 Lifespan (startup)
-# -----------------------
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Runs before the app starts and after it stops."""
-    try:
-        logger.info("Creating database tables if not existing...")
-        Base.metadata.create_all(bind=engine)
-        logger.info("Database tables ready.")
-    except Exception as e:
-        logger.exception("Error during DB initialization on startup: %s", e)
-        raise
-
-    yield  # startup complete
-
-    # (Optional) add shutdown logic here
-    logger.info("Application shutdown complete.")
+# logger = logging.getLogger(__name__)
 
 
-# -----------------------
-# FastAPI App
-# -----------------------
-app = FastAPI(
-    title="Multi-Tenant RAG Portal",
-    lifespan=lifespan,
-)
+# # -----------------------
+# # 🚀 Lifespan (startup)
+# # -----------------------
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     """Runs before the app starts and after it stops."""
+#     try:
+#         logger.info("Creating database tables if not existing...")
+#         Base.metadata.create_all(bind=engine)
+#         logger.info("Database tables ready.")
+#     except Exception as e:
+#         logger.exception("Error during DB initialization on startup: %s", e)
+#         raise
 
-# CORS
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+#     yield  # startup complete
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+#     # (Optional) add shutdown logic here
+#     logger.info("Application shutdown complete.")
 
 
-# Routers
-app.include_router(auth_router)
-app.include_router(documents_router)
-app.include_router(chat_router, prefix="/chat", tags=["chat"])
-app.include_router(users_router)
+# # -----------------------
+# # FastAPI App
+# # -----------------------
+# app = FastAPI(
+#     title="Multi-Tenant RAG Portal",
+#     lifespan=lifespan,
+# )
+
+# # CORS
+# origins = [
+#     "http://localhost:5173",
+#     "http://127.0.0.1:5173",
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
-# Health check
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+# # Routers
+# app.include_router(auth_router)
+# app.include_router(documents_router)
+# app.include_router(chat_router, prefix="/chat", tags=["chat"])
+# app.include_router(users_router)
+
+
+# # Health check
+# @app.get("/health")
+# def health_check():
+#     return {"status": "ok"}
 
 
 # @app.get("/ai-test")
@@ -145,3 +145,13 @@ def health_check():
 #     ]
 #     answer = ai.chat(messages)
 #     return {"answer": answer}
+
+# app/main.py
+
+from fastapi import FastAPI
+
+app = FastAPI(title="Mini Test App")
+
+@app.get("/health")
+def health():
+    return {"status": "ok from app.main"}
