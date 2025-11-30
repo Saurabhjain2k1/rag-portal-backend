@@ -1,16 +1,18 @@
 # app/api/routes_documents.py
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
-from app.ai import get_ai_provider
-from app.ai.base import AIProvider
+from sqlalchemy.orm import Session
+from typing import List  # (still here if PaginatedDocumentsResponse uses List internally)
+
 from app.services.ingestion_service import ingest_with_langchain
 from app.models.document import Document
 from app.models.user import User
-from app.schemas.document import DocumentResponse, UrlUploadRequest, PaginatedDocumentsResponse
+from app.schemas.document import (
+    DocumentResponse,
+    UrlUploadRequest,
+    PaginatedDocumentsResponse,
+)
 from app.services.document_service import save_document, save_url_document
-# from app.services.url_ingestion_service import ingest_from_url
 from app.api import deps
-from sqlalchemy.orm import Session
-from typing import List
 from app.config import settings
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -40,10 +42,10 @@ async def upload_document(
     # 🚨 2. Optional: reject empty files
     if len(content) == 0:
         raise HTTPException(status_code=400, detail="Empty file is not allowed.")
-    
+
+    # We still pass `file` to save_document; FastAPI keeps underlying file.file
     doc = save_document(db=db, tenant_id=admin_user.tenant_id, file=file)
     return doc
-
 
 
 @router.get("/", response_model=PaginatedDocumentsResponse)
@@ -75,8 +77,7 @@ def list_documents(
     total = base_query.count()
 
     docs = (
-        base_query
-        .order_by(Document.created_at.desc())
+        base_query.order_by(Document.created_at.desc())
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -88,7 +89,6 @@ def list_documents(
         page=page,
         limit=limit,
     )
-
 
 
 @router.post("/{document_id}/ingest")
@@ -133,6 +133,7 @@ def ingest_document_endpoint(
             detail=f"Ingestion failed: {str(e)}",
         )
 
+
 @router.post("/upload-url", response_model=DocumentResponse)
 def upload_document_url(
     payload: UrlUploadRequest,
@@ -158,4 +159,3 @@ def upload_document_url(
     )
 
     return doc
-
