@@ -159,7 +159,7 @@ import logging
 
 from app.db import Base, engine
 from app.api.routes_auth import router as auth_router   # 👈 only this router added
-
+from app.api.routes_users import router as users_router
 logger = logging.getLogger(__name__)
 
 origins = [
@@ -193,7 +193,7 @@ app.add_middleware(
 
 # Routers (only auth for now)
 app.include_router(auth_router)
-
+app.include_router(users_router)
 
 @app.get("/health")
 def health_check():
