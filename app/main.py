@@ -67,8 +67,8 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.db import Base, engine
-from app.ai import get_ai_provider
-from app.ai.base import AIProvider
+# from app.ai import get_ai_provider
+# from app.ai.base import AIProvider
 from app.api.routes_auth import router as auth_router
 from app.api.routes_documents import router as documents_router
 from app.api.routes_chat import router as chat_router
@@ -134,14 +134,14 @@ def health_check():
     return {"status": "ok"}
 
 
-@app.get("/ai-test")
-def ai_test(
-    prompt: str = "Say hello!",
-    ai: AIProvider = Depends(get_ai_provider),
-):
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": prompt},
-    ]
-    answer = ai.chat(messages)
-    return {"answer": answer}
+# @app.get("/ai-test")
+# def ai_test(
+#     prompt: str = "Say hello!",
+#     ai: AIProvider = Depends(get_ai_provider),
+# ):
+#     messages = [
+#         {"role": "system", "content": "You are a helpful assistant."},
+#         {"role": "user", "content": prompt},
+#     ]
+#     answer = ai.chat(messages)
+#     return {"answer": answer}
