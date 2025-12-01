@@ -327,26 +327,30 @@ Ingestion uses **LangChain**:
 * [ ] Tenant settings (rename, limits, etc.)
 * [ ] Audit logs for chat & ingestion
 
----
-
-## 🧪 Testing (placeholder)
-
-You can add tests under `tests/`:
-
-```bash
-pytest
-```
-
-Example areas to test:
-
-* Auth flow (`/auth/login`, `/auth/me`, invalid tokens)
-* Tenant registration
-* Role enforcement (user vs admin)
-* Document upload + ingestion
-* Chat endpoint with fake LLM
 
 ---
 
+## ⚙️ Deployment Notes & Optimizations
+
+This project uses heavy ML + LangChain libraries (Torch, transformers, Chroma, sentence-transformers), which can cause **startup failures on free-tier hosts** like Render due to slow imports and high memory usage.
+
+To ensure successful deployment, the backend uses the following optimizations:
+
+### 🧠 Lazy Imports for Heavy Modules
+
+Instead of importing ML libraries at startup, they are imported **inside ingestion functions only**.
+
+**Benefit:**
+
+* Fast startup, reliable port binding
+* App deploys even with large ML dependencies
+
+**Trade-off:**
+
+* First ingestion call is slower (models load on demand)
+
+
+---
 
 ## 🙋‍♂️ Author
 

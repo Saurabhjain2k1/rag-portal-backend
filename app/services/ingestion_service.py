@@ -50,7 +50,10 @@ def ingest_with_langchain(db: Session, document: Document, tenant_id: int) -> in
     All heavy imports are inside this function so that they DON'T
     run during app startup on Render.
     """
-    # 🔁 Heavy imports moved here (lazy)
+    # IMPORTANT:
+    # Heavy dependencies are imported lazily inside functions to avoid
+    # Render startup failures (no open ports).
+
     from langchain_text_splitters import RecursiveCharacterTextSplitter
     from langchain_huggingface import HuggingFaceEmbeddings
     from langchain_chroma import Chroma
